@@ -1,0 +1,17 @@
+div.docs-text-styling.component-title
+    h4 New User
+div
+    div.mdl-shadow--3dp
+                    form.mdl-layout__header-row(name="createuser", action="/createuser" , method="post")
+                        div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="margin:10px")
+                            input.mdl-textfield__input(type="text", name="name")
+                            label.mdl-textfield__label(for="name") name
+                        div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="margin:10px")
+                            input.mdl-textfield__input(type="password", name="password")
+                            label.mdl-textfield__label(for="password") password
+                        div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="margin:10px")
+                            input.mdl-textfield__input(type="password", name="passwordrepeat")
+                            label.mdl-textfield__label(for="passwordrepeat") password repeat
+                        div.actions(style="margin:10px")
+                            input.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect(type="submit", value="create user")
+        //- https://stackoverflow.com/questions/6515502/javascript-form-submit-confirm-or-cancel-submission-dialog-box
