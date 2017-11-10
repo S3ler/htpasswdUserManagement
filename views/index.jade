@@ -16,7 +16,8 @@ block usertable
                     each user in users
                         tr
                             td
-                                h6=user.name
+                                div(style='text-overflow: ellipsis; margin:auto; max-width:150px; display:inline-block;')
+                                    h6=user.name
                             td
                                 form.mdl-layout__header-row(name="updatepassword", action="/updatepassword" , method="post")
                                     div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
