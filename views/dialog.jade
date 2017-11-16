@@ -1,0 +1,14 @@
+dialog.mdl-dialog(id='dialog')
+    h2.mdl-dialog__title Admin Login
+    div.mdl_dialog__content
+        form(method='dialog')
+            div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                input.mdl-textfield__input(type="text", name="adminuser", id="dialogadminuser")
+                label.mdl-textfield__label(for="adminuser") adminuser
+            div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                input.mdl-textfield__input(type="password", name="adminpassword", id="dialogadminpassword")
+                label.mdl-textfield__label(for="adminuser") adminpassword
+    div.mdl-dialog__actions
+        button.mdl-button(type='button', id='dialogsubmitbutton') Submit
+        button.mdl-button(type='button', id='dialogcancelbutton') Cancel
+

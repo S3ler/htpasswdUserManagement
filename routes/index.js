@@ -6,18 +6,29 @@ var path = require('path');
 var htpasswdAPIPath = path.join(__dirname, '..', 'htpasswdManagerAPI', 'htpasswdAPI');
 var htpasswdInterface = require(htpasswdAPIPath);
 
-var htpasswdPath = path.join(__dirname, '..', 'htpasswd', 'users', 'htpasswd');
+var userHtpasswdPath = path.join(__dirname, '..', 'htpasswd', 'users', 'htpasswd');
+var adminHtpasswdPath = path.join(__dirname, '..', 'htpasswd', 'admin', 'htpasswd');
+
 
 router.get('/', function (req, res, next) {
     var entryNames = [];
     try {
-        entryNames = htpasswdInterface.getAllUsernames(htpasswdPath);
+        entryNames = htpasswdInterface.getAllUsernames(userHtpasswdPath);
     } catch (e) {
         console.log(e);
     }
-    res.render('index', {title: 'Express', users: entryNames});
+    res.render('indexuser', {title: 'Express', users: entryNames});
 });
 
+router.get('/admin', function (req, res, next) {
+    var entryNames = [];
+    try {
+        entryNames = htpasswdInterface.getAllUsernames(adminHtpasswdPath);
+    } catch (e) {
+        console.log(e);
+    }
+    res.render('indexadmin', {title: 'Express', users: entryNames});
+});
 
 router.post('/createuser', function (req, res) {
 
@@ -55,11 +66,11 @@ router.post('/createuser', function (req, res) {
     // TODO: check password values
     // TODO: max length is 40 character name
     try {
-        if (htpasswdInterface.containsUsername(htpasswdPath, name)) {
+        if (htpasswdInterface.containsUsername(userHtpasswdPath, name)) {
             res.redirect(failURL + '&' + 'reason=Username already exists.');
             return;
         }
-        htpasswdInterface.createUser(htpasswdPath, name, password);
+        htpasswdInterface.createUser(userHtpasswdPath, name, password);
         res.redirect(successURL);
         return;
     } catch (e) {
@@ -70,12 +81,12 @@ router.post('/createuser', function (req, res) {
 
 router.get('/?createuser=success', function (req, res, next) {
     // TODO implement me
-    res.render('index', {title: 'Express'});
+    res.render('indexuser', {title: 'Express'});
 });
 
 router.get('/?createuser=fail', function (req, res, next) {
     // TODO implement me
-    res.render('index', {title: 'Express'});
+    res.render('indexuser', {title: 'Express'});
 });
 
 
@@ -110,11 +121,11 @@ router.post('/updatepassword', function (req, res, next) {
     }
     //TODO check more
     try {
-        if (!htpasswdInterface.containsUsername(htpasswdPath, name)) {
+        if (!htpasswdInterface.containsUsername(userHtpasswdPath, name)) {
             res.redirect(failURL + '&' + 'reason=User does not exist.');
             return;
         }
-        if (!htpasswdInterface.updatePassword(htpasswdPath, name, password)) {
+        if (!htpasswdInterface.updatePassword(userHtpasswdPath, name, password)) {
             res.redirect(failURL);
             return;
         }
@@ -128,12 +139,12 @@ router.post('/updatepassword', function (req, res, next) {
 
 router.get('/?updatepassword=success', function (req, res, next) {
     // TODO implement me
-    res.render('index', {title: 'Express'});
+    res.render('indexuser', {title: 'Express'});
 });
 
 router.get('/?updatepassword=fail', function (req, res, next) {
     // TODO implement me
-    res.render('index', {title: 'Express'});
+    res.render('indexuser', {title: 'Express'});
 });
 
 
@@ -145,8 +156,8 @@ router.post('/delete', function (req, res) {
     var name = name + "";
 
     try {
-        if (htpasswdInterface.containsUsername(htpasswdPath, name)) {
-            htpasswdInterface.deleteUser(htpasswdPath, name);
+        if (htpasswdInterface.containsUsername(userHtpasswdPath, name)) {
+            htpasswdInterface.deleteUser(userHtpasswdPath, name);
             res.redirect(successURL);
             return;
         }
@@ -161,12 +172,12 @@ router.post('/delete', function (req, res) {
 
 router.get('/?deleteuser=success', function (req, res, next) {
     // TODO implement me
-    res.render('index', {title: 'Express'});
+    res.render('indexuser', {title: 'Express'});
 });
 
 router.get('/?deleteuser=fail', function (req, res, next) {
     // TODO implement me
-    res.render('index', {title: 'Express'});
+    res.render('indexuser', {title: 'Express'});
 });
 
 module.exports = router;
