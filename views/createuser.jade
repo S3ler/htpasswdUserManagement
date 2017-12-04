@@ -2,13 +2,13 @@ div.docs-text-styling.component-title
     h4 New User
 div
     div.mdl-shadow--3dp
-                    form.mdl-layout__header-row(name="createuser", action="/createuser", onsubmit="onSubmit(this); return false;", method="post")
+                    form.mdl-layout__header-row(name="createuser", action="/createuser", onsubmit="showAdminSubmitDialog(this); return false;", method="post")
                         div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
                             input.mdl-textfield__input(type="text", name="adminuser")
                             label.mdl-textfield__label(for="adminuser") adminuser
                         div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
                             input.mdl-textfield__input(type="password", name="adminpassword")
-                            label.mdl-textfield__label(for="adminuser") adminpassword
+                            label.mdl-textfield__label(for="adminpassword") adminpassword
                         div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="margin:10px")
                             input.mdl-textfield__input(type="text", name="name")
                             label.mdl-textfield__label(for="name") name

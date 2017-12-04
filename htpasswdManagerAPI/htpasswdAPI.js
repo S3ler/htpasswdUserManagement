@@ -2,20 +2,18 @@
 var md5 = require("apache-md5");
 var fs = require('fs');
 
-module.exports.createUser = (htpasswdPath, username, password) =>
-{
-    var newUserEntry = username + ":" + md5(password) + "\n";
+module.exports.createUser = (htpasswdPath, username, password) => {
+    let newUserEntry = username + ":" + md5(password) + "\n";
     fs.appendFileSync(htpasswdPath, newUserEntry);
 };
 
-module.exports.getAllUsernames = (htpasswdPath) =>
-{
-    var data = fs.readFileSync(htpasswdPath, 'utf8');
-    var entryNames = [];
-    var lines = data.toString().split("\n");
-    for (var i = 0; i < lines.length; i++) {
-        var entry = lines[i] + "";
-        var entryName = entry.split(":")[0];
+module.exports.getAllUsernames = (htpasswdPath) => {
+    let data = fs.readFileSync(htpasswdPath, 'utf8');
+    let entryNames = [];
+    let lines = data.toString().split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        let entry = lines[i] + "";
+        let entryName = entry.split(':')[0];
         if (entryName !== null && entryName.length > 0) {
             entryNames.push({name: entryName});
         }
@@ -23,30 +21,46 @@ module.exports.getAllUsernames = (htpasswdPath) =>
     return entryNames;
 };
 
-module.exports.containsUsername = (htpasswdPath, username) =>
-{
-    var data = fs.readFileSync(htpasswdPath, 'utf8');
-    var lines = data.toString().split("\n");
-    for (var i = 0; i < lines.length; i++) {
-        var line = lines[i] + "";
-        if (line.startsWith(username)) {
+module.exports.containsUsername = (htpasswdPath, username) => {
+    let data = fs.readFileSync(htpasswdPath, 'utf8');
+    let lines = data.toString().split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i] + "";
+        let entryName = line.split(':')[0];
+        if (username == entryName) {
             return true;
         }
     }
     return false;
 };
 
-module.exports.updatePassword = (htpasswdPath, username, password) =>
-{
-    var data = fs.readFileSync(htpasswdPath, 'utf8');
-    var lines = data.toString().split("\n");
-    for (var i = 0; i < lines.length; i++) {
-        var line = lines[i] + "";
+module.exports.matchPassword = (htpasswdPath, username, password) => {
+    let data = fs.readFileSync(htpasswdPath, 'utf8');
+    let lines = data.toString().split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i] + "";
+        let entryName = line.split(':')[0];
+        if (username == entryName) {
+            let entryPassword = line.split(':')[1];
+            if(md5(password, entryPassword) == entryPassword){
+                return true;
+            }
+            return false;
+        }
+    }
+    return false;
+};
+
+module.exports.updatePassword = (htpasswdPath, username, password) => {
+    let data = fs.readFileSync(htpasswdPath, 'utf8');
+    let lines = data.toString().split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i] + "";
         if (line.startsWith(username)) {
             lines.splice(i, 1);
-            var newUserEntry = username + ":" + md5(password) + "\n";
+            let newUserEntry = username + ":" + md5(password) + "\n";
             lines.push(newUserEntry);
-            var newEntries = lines.join('\n');
+            let newEntries = lines.join('\n');
             fs.writeFileSync(htpasswdPath, newEntries, 'utf8');
             return true;
         }
@@ -54,15 +68,14 @@ module.exports.updatePassword = (htpasswdPath, username, password) =>
     return false;
 };
 
-module.exports.deleteUser = (htpasswdPath, username) =>
-{
-    var data = fs.readFileSync(htpasswdPath, 'utf8');
-    var lines = data.toString().split("\n");
-    for (var i = 0; i < lines.length; i++) {
-        var line = lines[i] + "";
+module.exports.deleteUser = (htpasswdPath, username) => {
+    let data = fs.readFileSync(htpasswdPath, 'utf8');
+    let lines = data.toString().split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i] + "";
         if (line.startsWith(username)) {
             lines.splice(i, 1);
-            var newEntries = lines.join('\n');
+            let newEntries = lines.join('\n');
             fs.writeFileSync(htpasswdPath, newEntries, 'utf8');
             return;
         }

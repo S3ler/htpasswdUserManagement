@@ -1,43 +1,54 @@
 extends layout
 
 block usertable
-        include createadmin
+    include createadmin
 
-        div.docs-text-styling.component-title
-            h4 Registered Admin
+    div.docs-text-styling.component-title
+        h4 Registered Admin
 
-        -var userlist = users
-        div
-            table.mdl-data-table.mdl-js-data-table.mdl-shadow--3dp
-                thead
+    -var userlist = users
+    div
+        table.mdl-data-table.mdl-js-data-table.mdl-shadow--3dp
+            thead
+                tr
+                    th Name
+                    th(style="padding-right:90px") Change Password
+                    th(style="padding-right:40px") Delete User
+            tbody
+                each user in users
                     tr
-                        th Name
-                        th(style="padding-right:90px") Change Password
-                        th(style="padding-right:40px") Delete User
-                tbody
-                    each user in users
-                        tr
-                            td
-                                div(style='text-overflow: ellipsis; margin:auto; max-width:150px; display:inline-block;')
-                                    h6=user.name
-                            td
-                                onsubmit="return myFunction()"
-                                form.mdl-layout__header-row(name="updateadminpassword", action="/updateadminpassword", method="post")
-                                    div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
-                                        input.mdl-textfield__input(type="text", name="name", value="#{user.name}")
-                                        label.mdl-textfield__label(for="name") name
-                                    div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="margin:10px")
-                                        input.mdl-textfield__input(type="password", name="password")
-                                        label.mdl-textfield__label(for="password") password
-                                    div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="margin:10px")
-                                        input.mdl-textfield__input(type="password", name="passwordrepeat")
-                                        label.mdl-textfield__label(for="passwordrepeat") password repeat
-                                    div.actions(style="margin:10px")
-                                        input.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect(type="submit", value="update admin password")
-                            td
-                                form(name="delete", action="/deleteadmin" , method="post")
-                                    div.input(style='display:none')
-                                        label(for="name") name
-                                        input(type="text", name="name" value="#{user.name}")
-                                    div.actions(style="margin:10px")
-                                        input.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect(type="submit", value="delete admin")
+                        td
+                            div(style='text-overflow: ellipsis; margin:auto; max-width:150px; display:inline-block;')
+                                h6=user.name
+                        td
+                            form.mdl-layout__header-row(name="updateadminpassword", action="/updateadminpassword", onsubmit="showAdminSubmitDialog(this); return false;", method="post")
+                                div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
+                                    input.mdl-textfield__input(type="text", name="adminuser")
+                                    label.mdl-textfield__label(for="adminuser") adminuser
+                                div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
+                                    input.mdl-textfield__input(type="password", name="adminpassword")
+                                    label.mdl-textfield__label(for="adminpassword") adminpassword
+                                div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
+                                    input.mdl-textfield__input(type="text", name="name", value="#{user.name}")
+                                    label.mdl-textfield__label(for="name") name
+                                div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="margin:10px")
+                                    input.mdl-textfield__input(type="password", name="password")
+                                    label.mdl-textfield__label(for="password") password
+                                div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="margin:10px")
+                                    input.mdl-textfield__input(type="password", name="passwordrepeat")
+                                    label.mdl-textfield__label(for="passwordrepeat") password repeat
+                                div.actions(style="margin:10px")
+                                    input.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect(type="submit", value="update admin password")
+                        td
+                            form(name="delete", action="/deleteadmin", onsubmit="showAdminSubmitDialog(this); return false;", method="post")
+                                div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
+                                    input.mdl-textfield__input(type="text", name="adminuser")
+                                    label.mdl-textfield__label(for="adminuser") adminuser
+                                div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
+                                    input.mdl-textfield__input(type="password", name="adminpassword")
+                                    label.mdl-textfield__label(for="adminpassword") adminpassword
+                                div.input(style='display:none')
+                                    label(for="name") name
+                                    input(type="text", name="name" value="#{user.name}")
+                                div.actions(style="margin:10px")
+                                    input.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect(type="submit", value="delete admin")

@@ -11,7 +11,7 @@ var adminHtpasswdPath = path.join(__dirname, '..', 'htpasswd', 'admin', 'htpassw
 
 
 router.get('/', function (req, res, next) {
-    var entryNames = [];
+    let entryNames = [];
     try {
         entryNames = htpasswdInterface.getAllUsernames(userHtpasswdPath);
     } catch (e) {
@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/admin', function (req, res, next) {
-    var entryNames = [];
+    let entryNames = [];
     try {
         entryNames = htpasswdInterface.getAllUsernames(adminHtpasswdPath);
     } catch (e) {
@@ -32,39 +32,73 @@ router.get('/admin', function (req, res, next) {
 
 router.post('/createuser', function (req, res) {
 
-    var successURL = '/?createuser=success';
-    var failURL = '/?createuser=fail';
+    let successURL = '/?createuser=success';
+    let failURL = '/?createuser=fail';
 
-    var name = req.body['name'];
-    var password = req.body['password'];
-    var passwordrepeat = req.body['passwordrepeat'];
+    let name = req.body['name'];
+    let password = req.body['password'];
+    let passwordrepeat = req.body['passwordrepeat'];
+
+    let adminuser = req.body['adminuser'];
+    let adminpassword = req.body['adminpassword'];
+
+    if (!htpasswdInterface.containsUsername(adminHtpasswdPath, adminuser)) {
+        res.redirect(failURL + '&' + 'reason=Admin does not exist');
+        return;
+    }
+    if (!htpasswdInterface.matchPassword(adminHtpasswdPath, adminuser, adminpassword)) {
+        res.redirect(failURL + '&' + 'reason=Admin password wrong.');
+        return;
+    }
+
+    /*
+    console.log(name);
+    console.log(password);
+    console.log(passwordrepeat);
+    console.log(adminuser);
+    console.log(adminpassword);
+    */
 
     if (name.length === 0) {
         res.redirect(failURL + '&' + 'reason=Username is empty.');
         return;
     }
-    if (name.length < 5) {
-        res.redirect(failURL + '&' + 'reason=Username is too short. Must be at least 5 characters.');
-        return;
-    }
+
     if (password.length === 0) {
         res.redirect(failURL + '&' + 'reason=Password is empty.');
         return;
     }
-    if (password.length < 6) {
-        res.redirect(failURL + '&' + 'reason=Username is too short. Must be at least 6 characters.');
-        return;
-    }
+
     if (passwordrepeat.length === 0) {
         res.redirect(failURL + '&' + 'reason=Password repeat is empty.');
         return;
     }
-    //if(password.equals(passwordrepeat) == false){
-    //    res.redirect(failURL + '&' + 'reason=Password and Password repeat do not match.');
-    //}
+
+    if (name.length < 1) {
+        res.redirect(failURL + '&' + 'reason=Username is too short. Must be at least 1 characters.');
+        return;
+    }
+
+    if (/[^a-zA-Z]/.test(name)) {
+        res.redirect(failURL + '&' + 'reason=User contains non valid characters.');
+        return;
+    }
+
+    if (password.length < 1) {
+        res.redirect(failURL + '&' + 'reason=Username is too short. Must be at least 1 characters.');
+        return;
+    }
+
+    if(password != passwordrepeat){
+        res.redirect(failURL + '&' + 'reason=Password and Passwordrepeat do not match.');
+        return;
+    }
+
+
     // TODO: escape name string and passwords
     // TODO: check password values
     // TODO: max length is 40 character name
+
     try {
         if (htpasswdInterface.containsUsername(userHtpasswdPath, name)) {
             res.redirect(failURL + '&' + 'reason=Username already exists.');
@@ -91,7 +125,7 @@ router.get('/?createuser=fail', function (req, res, next) {
 
 
 router.post('/updatepassword', function (req, res, next) {
-    console.log(req.body);
+
     var successURL = '/?updatepassword=success';
     var failURL = '/?updatepassword=fail';
 
@@ -99,27 +133,46 @@ router.post('/updatepassword', function (req, res, next) {
     var password = req.body['password'];
     var passwordrepeat = req.body['passwordrepeat'];
 
-    if (name.length === 0) {
-        res.redirect(failURL + '&' + 'reason=Username is empty.');
+    let adminuser = req.body['adminuser'];
+    let adminpassword = req.body['adminpassword'];
+
+    if (!htpasswdInterface.containsUsername(adminHtpasswdPath, adminuser)) {
+        res.redirect(failURL + '&' + 'reason=Admin does not exist');
         return;
     }
-    if (name.length < 5) {
-        res.redirect(failURL + '&' + 'reason=Username is too short. Must be at least 5 characters.');
+    if (!htpasswdInterface.matchPassword(adminHtpasswdPath, adminuser, adminpassword)) {
+        res.redirect(failURL + '&' + 'reason=Admin password wrong.');
+        return;
+    }
+
+    if (name.length === 0) {
+        res.redirect(failURL + '&' + 'reason=Username is empty.');
         return;
     }
     if (password.length === 0) {
         res.redirect(failURL + '&' + 'reason=Password is empty.');
         return;
     }
-    if (password.length < 6) {
-        res.redirect(failURL + '&' + 'reason=Username is too short. Must be at least 6 characters.');
-        return;
-    }
     if (passwordrepeat.length === 0) {
         res.redirect(failURL + '&' + 'reason=Password repeat is empty.');
         return;
     }
-    //TODO check more
+
+    if (name.length < 1) {
+        res.redirect(failURL + '&' + 'reason=Username is too short. Must be at least 1 characters.');
+        return;
+    }
+
+    if (password.length < 1) {
+        res.redirect(failURL + '&' + 'reason=Username is too short. Must be at least 1 characters.');
+        return;
+    }
+
+    if(password != passwordrepeat){
+        res.redirect(failURL + '&' + 'reason=Password and Passwordrepeat do not match.');
+        return;
+    }
+
     try {
         if (!htpasswdInterface.containsUsername(userHtpasswdPath, name)) {
             res.redirect(failURL + '&' + 'reason=User does not exist.');
@@ -149,6 +202,8 @@ router.get('/?updatepassword=fail', function (req, res, next) {
 
 
 router.post('/delete', function (req, res) {
+    console.log(res.body);
+
     var successURL = '/?deleteuser=success';
     var failURL = '/?deleteuser=fail';
 
