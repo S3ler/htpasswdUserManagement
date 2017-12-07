@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var fs = require('fs');
-var path = require('path');
+let express = require('express');
+let router = express.Router();
+let fs = require('fs');
+let path = require('path');
 
-var htpasswdAPIPath = path.join(__dirname, '..', 'htpasswdManagerAPI', 'htpasswdAPI');
-var htpasswdInterface = require(htpasswdAPIPath);
+let htpasswdAPIPath = path.join(__dirname, '..', 'htpasswdManagerAPI', 'htpasswdAPI');
+let htpasswdInterface = require(htpasswdAPIPath);
 
-var userHtpasswdPath = path.join(__dirname, '..', 'htpasswd', 'users', 'htpasswd');
-var adminHtpasswdPath = path.join(__dirname, '..', 'htpasswd', 'admin', 'htpasswd');
+let userHtpasswdPath = path.join(__dirname, '..', 'htpasswd', 'users', 'htpasswd');
+let adminHtpasswdPath = path.join(__dirname, '..', 'htpasswd', 'admin', 'htpasswd');
 
 
 router.get('/', function (req, res, next) {
@@ -51,14 +51,6 @@ router.post('/createuser', function (req, res) {
         return;
     }
 
-    /*
-    console.log(name);
-    console.log(password);
-    console.log(passwordrepeat);
-    console.log(adminuser);
-    console.log(adminpassword);
-    */
-
     if (name.length === 0) {
         res.redirect(failURL + '&' + 'reason=Username is empty.');
         return;
@@ -89,15 +81,10 @@ router.post('/createuser', function (req, res) {
         return;
     }
 
-    if(password != passwordrepeat){
+    if (password != passwordrepeat) {
         res.redirect(failURL + '&' + 'reason=Password and Passwordrepeat do not match.');
         return;
     }
-
-
-    // TODO: escape name string and passwords
-    // TODO: check password values
-    // TODO: max length is 40 character name
 
     try {
         if (htpasswdInterface.containsUsername(userHtpasswdPath, name)) {
@@ -114,24 +101,22 @@ router.post('/createuser', function (req, res) {
 });
 
 router.get('/?createuser=success', function (req, res, next) {
-    // TODO implement me
     res.render('indexuser', {title: 'Express'});
 });
 
 router.get('/?createuser=fail', function (req, res, next) {
-    // TODO implement me
     res.render('indexuser', {title: 'Express'});
 });
 
 
 router.post('/updatepassword', function (req, res, next) {
 
-    var successURL = '/?updatepassword=success';
-    var failURL = '/?updatepassword=fail';
+    let successURL = '/?updatepassword=success';
+    let failURL = '/?updatepassword=fail';
 
-    var name = req.body['name'];
-    var password = req.body['password'];
-    var passwordrepeat = req.body['passwordrepeat'];
+    let name = req.body['name'];
+    let password = req.body['password'];
+    let passwordrepeat = req.body['passwordrepeat'];
 
     let adminuser = req.body['adminuser'];
     let adminpassword = req.body['adminpassword'];
@@ -168,7 +153,7 @@ router.post('/updatepassword', function (req, res, next) {
         return;
     }
 
-    if(password != passwordrepeat){
+    if (password != passwordrepeat) {
         res.redirect(failURL + '&' + 'reason=Password and Passwordrepeat do not match.');
         return;
     }
@@ -191,24 +176,31 @@ router.post('/updatepassword', function (req, res, next) {
 });
 
 router.get('/?updatepassword=success', function (req, res, next) {
-    // TODO implement me
     res.render('indexuser', {title: 'Express'});
 });
 
 router.get('/?updatepassword=fail', function (req, res, next) {
-    // TODO implement me
     res.render('indexuser', {title: 'Express'});
 });
 
 
 router.post('/delete', function (req, res) {
-    console.log(res.body);
 
-    var successURL = '/?deleteuser=success';
-    var failURL = '/?deleteuser=fail';
+    let successURL = '/?deleteuser=success';
+    let failURL = '/?deleteuser=fail';
 
-    var name = req.body['name'];
-    var name = name + "";
+    let name = req.body['name'] + "";
+    let adminuser = req.body['adminuser'];
+    let adminpassword = req.body['adminpassword'];
+
+    if (!htpasswdInterface.containsUsername(adminHtpasswdPath, adminuser)) {
+        res.redirect(failURL + '&' + 'reason=Admin does not exist');
+        return;
+    }
+    if (!htpasswdInterface.matchPassword(adminHtpasswdPath, adminuser, adminpassword)) {
+        res.redirect(failURL + '&' + 'reason=Admin password wrong.');
+        return;
+    }
 
     try {
         if (htpasswdInterface.containsUsername(userHtpasswdPath, name)) {
@@ -226,12 +218,10 @@ router.post('/delete', function (req, res) {
 });
 
 router.get('/?deleteuser=success', function (req, res, next) {
-    // TODO implement me
     res.render('indexuser', {title: 'Express'});
 });
 
 router.get('/?deleteuser=fail', function (req, res, next) {
-    // TODO implement me
     res.render('indexuser', {title: 'Express'});
 });
 
