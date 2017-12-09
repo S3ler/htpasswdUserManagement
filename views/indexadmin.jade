@@ -21,7 +21,7 @@ block usertable
                             div(style='text-overflow: ellipsis; margin:auto; max-width:150px; display:inline-block;')
                                 h6=user.name
                         td
-                            form.mdl-layout__header-row(name="updateadminpassword", action="/updateadminpassword", onsubmit="showAdminSubmitDialog(this); return false;", method="post")
+                            form.mdl-layout__header-row(name="updateadminpassword", action=base_path +"/updateadminpassword", onsubmit="showAdminSubmitDialog(this); return false;", method="post")
                                 div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
                                     input.mdl-textfield__input(type="text", name="adminuser")
                                     label.mdl-textfield__label(for="adminuser") adminuser
@@ -40,7 +40,7 @@ block usertable
                                 div.actions(style="margin:10px")
                                     input.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect(type="submit", value="update admin password")
                         td
-                            form(name="delete", action="/deleteadmin", onsubmit="showAdminSubmitDialog(this); return false;", method="post")
+                            form(name="delete", action="/deleteadmin", onsubmit=base_path +"showAdminSubmitDialog(this); return false;", method="post")
                                 div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style='display:none')
                                     input.mdl-textfield__input(type="text", name="adminuser")
                                     label.mdl-textfield__label(for="adminuser") adminuser

@@ -2,7 +2,7 @@ div.docs-text-styling.component-title
     h4 New Admin
 div
     div.mdl-shadow--3dp
-                    form.mdl-layout__header-row(name="createadmin", action="/createadmin" , method="post")
+                    form.mdl-layout__header-row(name="createadmin", action=base_path +"/createadmin" , method="post")
                         div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="margin:10px")
                             input.mdl-textfield__input(type="text", name="name")
                             label.mdl-textfield__label(for="name") name

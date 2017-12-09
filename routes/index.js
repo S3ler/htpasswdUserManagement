@@ -9,6 +9,7 @@ let htpasswdInterface = require(htpasswdAPIPath);
 let userHtpasswdPath = path.join(__dirname, '..', 'htpasswd', 'users', 'htpasswd');
 let adminHtpasswdPath = path.join(__dirname, '..', 'htpasswd', 'admin', 'htpasswd');
 
+var base_path = process.env.BASE_URL;
 
 router.get('/', function (req, res, next) {
     let entryNames = [];
@@ -17,7 +18,7 @@ router.get('/', function (req, res, next) {
     } catch (e) {
         console.log(e);
     }
-    res.render('indexuser', {title: 'Express', users: entryNames});
+    res.render('indexuser', {title: 'Express', users: entryNames, base_path: (base_path != '') ? '/' + base_path : ''});
 });
 
 router.get('/admin', function (req, res, next) {
@@ -27,13 +28,13 @@ router.get('/admin', function (req, res, next) {
     } catch (e) {
         console.log(e);
     }
-    res.render('indexadmin', {title: 'Express', users: entryNames});
+    res.render('indexadmin', {title: 'Express', users: entryNames, base_path: (base_path != '') ? '/' + base_path : ''});
 });
 
 router.post('/createuser', function (req, res) {
 
-    let successURL = '/?createuser=success';
-    let failURL = '/?createuser=fail';
+    let successURL = ((base_path != '') ? '/' + base_path : '') + '/?createuser=success';
+    let failURL = ((base_path != '') ? '/' + base_path : '') + '/?createuser=fail';
 
     let name = req.body['name'];
     let password = req.body['password'];
@@ -111,8 +112,8 @@ router.get('/?createuser=fail', function (req, res, next) {
 
 router.post('/updatepassword', function (req, res, next) {
 
-    let successURL = '/?updatepassword=success';
-    let failURL = '/?updatepassword=fail';
+    let successURL = ((base_path != '') ? '/' + base_path : '') + '/?updatepassword=success';
+    let failURL = ((base_path != '') ? '/' + base_path : '') + '/?updatepassword=fail';
 
     let name = req.body['name'];
     let password = req.body['password'];
@@ -175,6 +176,7 @@ router.post('/updatepassword', function (req, res, next) {
     res.redirect(failURL);
 });
 
+
 router.get('/?updatepassword=success', function (req, res, next) {
     res.render('indexuser', {title: 'Express'});
 });
@@ -186,8 +188,8 @@ router.get('/?updatepassword=fail', function (req, res, next) {
 
 router.post('/delete', function (req, res) {
 
-    let successURL = '/?deleteuser=success';
-    let failURL = '/?deleteuser=fail';
+    let successURL = ((base_path != '') ? '/' + base_path : '') + '/?deleteuser=success';
+    let failURL = ((base_path != '') ? '/' + base_path : '') + '/?deleteuser=fail';
 
     let name = req.body['name'] + "";
     let adminuser = req.body['adminuser'];
