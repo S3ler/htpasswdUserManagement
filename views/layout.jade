@@ -3,11 +3,11 @@ html.mdc-typography
     head
         meta(charset="utf-8")
         title="Proxy User Management"
-        link(href='/fonts/mdl/Material+Icons', rel='stylesheet')
-        link(href='/stylesheets/mdl/1.3.0/material.min.css', rel='stylesheet')
-        link(href='/stylesheets/dialog-polyfill.css', rel='stylesheet')
-        script(defer, src='javascripts/jquery/jquery-3.2.1.min.js')
-        script(defer, src='javascripts/mdl/1.3.0/material.min.js')
+        link(href=base_path + '/fonts/mdl/Material+Icons', rel='stylesheet')
+        link(href=base_path + '/stylesheets/mdl/1.3.0/material.min.css', rel='stylesheet')
+        link(href=base_path + '/stylesheets/dialog-polyfill.css', rel='stylesheet')
+        script(defer, src= base_path + '/javascripts/jquery/jquery-3.2.1.min.js')
+        script(defer, src= base_path + '/javascripts/mdl/1.3.0/material.min.js')
     body
         div.mdl-layout.mdl-js-layout.mdl-layout--fixed-header
             include header

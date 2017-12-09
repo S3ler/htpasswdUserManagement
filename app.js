@@ -31,8 +31,9 @@ var index = require('./routes/index');
 if (base_url == '') {
     app.use('/', index);
 } else {
-    app.use('/' + base_url + '/', index);
-    console.log("base_url: " + '/' + base_url);
+    // app.use('/' + base_url + '/', index);
+    app.use('/', index);
+    // console.log("base_url: " + '/' + base_url);
 }
 
 // catch 404 and forward to error handler
