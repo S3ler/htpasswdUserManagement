@@ -2,8 +2,21 @@ version: '3'
 
 services:
   UserManagement:
-    image: s3ler/htpasswdusermanagement
-    build: .
+    build:
+      context: .
+      dockerfile: amd64/Dockerfile
+    image: s3ler/htpasswdusermanagement:latest
+    ports:
+      - 3000:3000
+    environment:
+#      - BASE_URL=foo/bar
+       - NODE_ENV=production
+
+  UserManagementRaspberryPi:
+    build:
+      context: .
+      dockerfile: arm32v7/Dockerfile
+    image: s3ler/htpasswdusermanagement:latest
     ports:
       - 3000:3000
     environment:

@@ -1,4 +1,4 @@
-FROM amd64/node:8.9.2-alpine
+FROM arm32v7/node:8.9.3
 
 # set working directory
 WORKDIR /usr/src/app
